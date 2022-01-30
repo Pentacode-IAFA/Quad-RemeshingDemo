@@ -22,7 +22,7 @@ namespace Ra {
 
         public:
             /// Constructor and destructor.
-            explicit MainWindow(QWidget *parent = nullptr);
+            explicit MainWindow(uint w = 800, uint h = 640, QWidget *parent = nullptr);
             virtual ~MainWindow() override;
 
             Ra::Gui::Viewer* getViewer() override;
@@ -50,6 +50,12 @@ namespace Ra {
         signals:
             void frameUpdate();
 
+            /// Emitted when the frame loads
+            void fileLoading( const QString path );
+
+        private slots:
+            void loadFile();
+
         private:
             void createConnections();
 
@@ -58,6 +64,8 @@ namespace Ra {
             std::unique_ptr<Ra::Gui::SelectionManager> m_selectionManager;
 
             std::unique_ptr<Ra::Gui::ItemModel> m_sceneModel;
+
+            QAction* loadFileAct;
 
         };
 

@@ -2,21 +2,28 @@
 // Created by clement on 23/01/2022.
 //
 
+#include <MainApplication.hpp>
 #include <Gui/MainWindow.hpp>
 #include <Engine/Rendering/ForwardRenderer.hpp>
 #include <Gui/SelectionManager/SelectionManager.hpp>
 #include <Gui/TreeModel/EntityTreeModel.hpp>
 #include <Gui/Viewer/CameraManipulator.hpp>
 #include <Gui/Viewer/Viewer.hpp>
+#include <IO/AssimpLoader/AssimpFileLoader.hpp>
+#include <Core/Asset/FileData.hpp>
+#include <QAction>
+#include <QMenuBar>
+#include <QFileDialog>
 
 namespace Ra{
     using namespace Gui;
     using namespace Engine;
     using namespace Engine::Rendering;
 
-    MainWindow::MainWindow(QWidget *parent) : MainWindowInterface(parent) {
+    MainWindow::MainWindow(uint w, uint h, QWidget *parent) : MainWindowInterface(parent) {
 
         if ( objectName().isEmpty() ) setObjectName( QString::fromUtf8( "RadiumSimpleWindow" ) );
+        resize( w, h );
 
         // Initialize the minimum tools for a Radium-Guibased Application
         m_viewer = std::make_unique<Viewer>();
@@ -32,6 +39,9 @@ namespace Ra{
         viewerWidget->setAutoFillBackground( false );
         setCentralWidget( viewerWidget );
         setWindowTitle( QString( "Radium player" ) );
+        auto fileMenu = menuBar()->addMenu(tr("&File"));
+        loadFileAct = new QAction("open");
+        fileMenu->addAction(loadFileAct);
 
         createConnections();
     }
@@ -72,7 +82,48 @@ namespace Ra{
         m_viewer.reset( nullptr );
     }
 
-    void MainWindow::createConnections() {}
+    void MainWindow::loadFile() {
+
+        QString filter;
+
+        QString allexts;
+        for ( const auto& loader : mainApp->m_engine->getFileLoaders() )
+        {
+            QString exts;
+            for ( const auto& e : loader->getFileExtensions() )
+            {
+                exts.append( QString::fromStdString( e ) + tr( " " ) );
+            }
+            allexts.append( exts + tr( " " ) );
+            filter.append( QString::fromStdString( loader->name() ) + tr( " (" ) + exts + tr( ");;" ) );
+        }
+        // add a filter concetenatting all the supported extensions
+        filter.prepend( tr( "Supported files (" ) + allexts + tr( ");;" ) );
+
+        // remove the last ";;" of the string
+        filter.remove( filter.size() - 2, 2 );
+
+        QSettings settings;
+        QString path         = settings.value( "files/load", QDir::homePath() ).toString();
+        QStringList pathList = QFileDialog::getOpenFileNames( this, "Open Files", path, filter );
+
+        if ( !pathList.empty() )
+        {
+            settings.setValue( "files/load", pathList.front() );
+
+            for ( const auto& file : pathList )
+            {
+                emit fileLoading( file );
+            }
+        }
+    }
+
+
+    void MainWindow::createConnections() {
+        connect(loadFileAct, &QAction::triggered, this, &MainWindow::loadFile);
+        // Loading setup.
+        connect( this, &MainWindow::fileLoading, mainApp, &Ra::Gui::BaseApplication::loadFile );
+    }
 
     void MainWindow::displayHelpDialog() {
         m_viewer->displayHelpDialog();
