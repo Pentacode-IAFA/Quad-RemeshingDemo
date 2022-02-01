@@ -10,6 +10,7 @@
 #include <Gui/TreeModel/EntityTreeModel.hpp>
 
 #include <QMainWindow>
+#include <QDockWidget>
 
 namespace Ra {
     namespace Gui {
@@ -67,6 +68,7 @@ namespace Ra {
 
             QAction* loadFileAct;
 
+            QDockWidget *m_dockWidget;
         };
 
     }

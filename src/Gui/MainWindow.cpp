@@ -14,6 +14,7 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QDockWidget>
 
 namespace Ra{
     using namespace Gui;
@@ -43,6 +44,12 @@ namespace Ra{
         loadFileAct = new QAction("open");
         fileMenu->addAction(loadFileAct);
 
+        // Plugin widget
+        QDockWidget *dockWidget = new QDockWidget("Dock", this);
+        dockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+        addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
+        m_dockWidget = dockWidget;
+
         createConnections();
     }
 
@@ -60,7 +67,13 @@ namespace Ra{
         return nullptr;
     }
 
-    void MainWindow::updateUi(Ra::Plugins::RadiumPluginInterface*) {}
+    void MainWindow::updateUi(Ra::Plugins::RadiumPluginInterface *plugin) {
+        QString name;
+        if(plugin->doAddWidget(name)) {
+            printf("plop\n");
+            m_dockWidget->setWidget(plugin->getWidget());
+        }
+    }
     void MainWindow::onFrameComplete() {}
     void MainWindow::addRenderer(const std::string&, std::shared_ptr<Ra::Engine::Rendering::Renderer> e)
     {
