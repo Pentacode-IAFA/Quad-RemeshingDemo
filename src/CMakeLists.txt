@@ -71,9 +71,21 @@ target_link_libraries (${PROJECT_NAME} PUBLIC
         Radium::Engine
         Radium::Gui
         Radium::IO
-        ${Qt5_LIBRARIES})
+        ${Qt5_LIBRARIES}
+        )
 
 configure_radium_app(
         NAME ${PROJECT_NAME}
         USE_PLUGINS
 )
+
+# Graphical apps
+include_directories(../libs/quadwild/components/field_computation)
+include_directories(../libs/quadwild/libs/vcglib)
+include_directories(../libs/quadwild/libs/libigl/include)
+add_library( quadwildlib SHARED IMPORTED GLOBAL)
+set_target_properties( quadwildlib PROPERTIES 
+        IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/libs/quadwild/components/field_computation/libfield_computation.so")
+
+target_link_libraries(${PROJECT_NAME} PUBLIC quadwildlib)
+

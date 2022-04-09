@@ -4,6 +4,8 @@
 
 #include <MainApplication.hpp>
 #include <Gui/MainWindow.hpp>
+#include "../libs/quadwild/components/field_computation/AutoRemesher.h"
+#include "../libs/quadwild/components/field_computation/triangle_mesh_type.h"
 
 class MainWindowFactory : public Ra::Gui::BaseApplication::WindowFactory
 {
@@ -18,6 +20,9 @@ int main( int argc, char** argv ) {
     Ra::MainApplication app( argc, argv );
     app.initialize( MainWindowFactory() );
     app.setContinuousUpdate( false );
+
+    FieldTriMesh tri_mesh;
+    
     return app.exec();
 }
 
