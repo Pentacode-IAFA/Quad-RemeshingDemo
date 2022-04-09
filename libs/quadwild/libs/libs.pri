@@ -16,7 +16,7 @@ GMM_PATH            = $$PWD/CoMISo/gmm/
 EIGEN_PATH          = $$PWD/eigen/
 
 #GUI external libraries (needed only for field_computation and field_tracing projects)
-ANTTWEAKBAR_PATH    = /home/mafo/dev/AntTweakBar
+ANTTWEAKBAR_PATH    = /home/mafo/dev/AntTweakBar/
 
 #External libraries
 BOOST_PATH          = /usr/include/boost/

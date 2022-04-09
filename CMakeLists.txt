@@ -34,5 +34,5 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # and for other tools.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(libs/quadwild/components/field_computation)
+add_subdirectory(libs/quadwild/quadwild)
 add_subdirectory(src)
