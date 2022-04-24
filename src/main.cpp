@@ -1,9 +1,18 @@
-//
-// Created by clement on 23/01/2022.
-//
-
 #include <MainApplication.hpp>
 #include <Gui/MainWindow.hpp>
+#include <QKeyEvent>
+
+#include <Gui/Viewer/Viewer.hpp>
+#include <Engine/Scene/EntityManager.hpp>
+#include <Engine/Scene/Entity.hpp>
+
+// include the KeyMappingManager
+#include <Gui/Utils/KeyMappingManager.hpp>
+#include <Gui/Utils/Keyboard.hpp>
+
+// include Qt components
+#include <QKeyEvent>
+#include <Gui/Viewer/Viewer.hpp>
 
 class MainWindowFactory : public Ra::Gui::BaseApplication::WindowFactory
 {
@@ -17,7 +26,8 @@ public:
 int main( int argc, char** argv ) {
     Ra::MainApplication app( argc, argv );
     app.initialize( MainWindowFactory() );
-    app.setContinuousUpdate( false );
+    app.setContinuousUpdate( true );
+
     return app.exec();
 }
 

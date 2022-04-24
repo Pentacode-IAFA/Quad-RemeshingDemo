@@ -15,7 +15,13 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QDockWidget>
-
+#include <Engine/Scene/EntityManager.hpp>
+#include <Engine/Scene/Entity.hpp>
+#include <Engine/RadiumEngine.hpp>
+#include <Engine/Rendering/RenderObjectManager.hpp>
+#include <Engine/Rendering/RenderObject.hpp>
+#include <Engine/Data/Mesh.hpp>
+#include <Core/Asset/GeometryData.hpp>
 namespace Ra{
     using namespace Gui;
     using namespace Engine;
@@ -131,11 +137,35 @@ namespace Ra{
         }
     }
 
+    void MainWindow::print_name(){
+        auto engine  = Ra::Engine::RadiumEngine::getInstance();
+        auto manager = engine->getRenderObjectManager();
+        auto entities = engine->getEntityManager()->getEntities();
+
+        for (int i = 1; i < entities.size(); i++){
+            auto e = entities[i];
+
+            std::cout<<e->getName()<<"\n";
+            auto ros = e->getComponents()[0]->getRenderObjects();
+            std::cout<<ros.size()<<"\n";
+
+            for (int y = 0; y < ros.size(); y++){
+                auto& miniros = ros[y];
+                auto renderO = manager->getRenderObject(miniros);
+                auto mesh = dynamic_cast<Ra::Core::Geometry::TriangleMesh&>(renderO->getMesh()->getAbstractGeometry());
+                std::cout<<"tset"<<mesh.getIndices().size()<<"\n";
+                
+                mesh.getAttrib("in_color")
+
+            }
+       };
+    }
 
     void MainWindow::createConnections() {
         connect(loadFileAct, &QAction::triggered, this, &MainWindow::loadFile);
         // Loading setup.
         connect( this, &MainWindow::fileLoading, mainApp, &Ra::Gui::BaseApplication::loadFile );
+        connect( this, &MainWindow::fileLoading, this, &MainWindow::print_name);
     }
 
     void MainWindow::displayHelpDialog() {

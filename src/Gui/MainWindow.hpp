@@ -39,6 +39,8 @@ namespace Ra {
             void addRenderer( const std::string& name,
                               std::shared_ptr<Ra::Engine::Rendering::Renderer> e ) override;
 
+            void print_name();
+
         public slots:
 
             void prepareDisplay() override;
