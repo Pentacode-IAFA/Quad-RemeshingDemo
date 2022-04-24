@@ -1,7 +1,7 @@
 #pragma once
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
-#include <patchgen/PatchVertexTraits.h>
-#include <kt84/openmesh/base/LaplaceDirect.h>
+#include "patchgen/PatchVertexTraits.h"
+#include "kt84/openmesh/base/LaplaceDirect.h"
 
 namespace patterns {
 

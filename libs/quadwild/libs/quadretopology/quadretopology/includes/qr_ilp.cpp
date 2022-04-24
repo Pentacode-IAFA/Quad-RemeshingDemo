@@ -25,7 +25,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "qr_ilp.h"
 
-#include <gurobi_c++.h>
 
 #define MIN_SUBDIVISION_VALUE 1
 #define FEASIBILITY_FIX_COST 1000000.0

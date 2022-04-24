@@ -1,5 +1,5 @@
 #pragma once
-#include <patchgen/PatchParam.h>
+#include "patchgen/PatchParam.h"
 #include "Patch.h"
 
 namespace patterns {

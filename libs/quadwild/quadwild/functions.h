@@ -7,11 +7,11 @@
 #include <tracing/mesh_type.h>
 #include <tracing/tracer_interface.h>
 
-#include <load_save.h>
-#include <mesh_types.h>
-#include <smooth_mesh.h>
-#include <quad_from_patches.h>
-#include <quad_mesh_tracer.h>
+#include "../components/quad_from_patches/load_save.h"
+#include "../components/quad_from_patches/mesh_types.h"
+#include "../components/quad_from_patches/smooth_mesh.h"
+#include "../components/quad_from_patches/quad_from_patches.h"
+#include "../components/quad_from_patches/quad_mesh_tracer.h"
 
 struct Parameters {
     Parameters() :

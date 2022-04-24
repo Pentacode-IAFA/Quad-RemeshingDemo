@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "qr_convert.h"
 
-#include <patterns/generate_patch.h>
+#include "../../patterns/patterns/generate_patch.h"
 
 namespace QuadRetopology {
 namespace internal {

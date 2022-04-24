@@ -79,14 +79,19 @@ configure_radium_app(
         USE_PLUGINS
 )
 
+# TODO: target_include_directories
+
 include_directories(../libs/quadwild/components/field_computation)
 include_directories(../libs/quadwild/libs/vcglib)
 include_directories(../libs/quadwild/libs/libigl/include)
 include_directories(../libs/quadwild/libs/xfield_tracer)
 include_directories(../libs/quadwild/libs/quadretopology)
+
 add_library( quadwildlib SHARED IMPORTED GLOBAL)
 set_target_properties( quadwildlib PROPERTIES 
         IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/libs/quadwild/quadwild/libquadwild.so")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC quadwildlib)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC quadwildlib )
 
