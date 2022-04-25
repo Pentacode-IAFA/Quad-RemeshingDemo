@@ -163,42 +163,32 @@ void MainWindow::display_Patch(QKeyEvent *) {
   auto new_mesh = Ra::Core::Geometry::TriangleMesh(mesh);
 
   new_mesh.addAttrib("in_color",
-                     Ra::Core::Vector4Array{new_mesh.vertices().size(),
-                                            Ra::Core::Utils::Color::Green()});
+                     Ra::Core::Vector4Array{new_mesh.vertices().size(), Ra::Core::Utils::Color::White()});
 
   auto &attrib =
       new_mesh.getAttrib(new_mesh.getAttribHandle<Vector4>("in_color"));
 
   auto &cont = attrib.getDataWithLock();
 
-  //   std::for_each(cont.begin(), cont.end(), [](Vector4 &v) {
-  //     v.x() = float(rand()) / float(RAND_MAX);
-  //     v.y() = float(rand()) / float(RAND_MAX);
-  //     v.z() = float(rand()) / float(RAND_MAX);
-  //   });
-
-  std::ofstream file("../src/Assets/bucket_p0.patch");
-
-  //   for (int i = 0; i < cont.size(); i++) {
-  //     cont[i].x() = float(rand()) / float(RAND_MAX);
-  //     cont[i].y() = float(rand()) / float(RAND_MAX);
-  //     cont[i].z() = float(rand()) / float(RAND_MAX);
-
-  //   }
+  std::cout << new_mesh.vertices().size() << std::endl;
 
   int i = 0;
-  std::ifstream stream("../src/Assets/bucket_p0.patch");
-
-  std::stringstream ss;
+  std::ifstream stream("../../src/Assets/bucket_p0.patch");
+  if(stream.is_open()){
+      std::cout << "Fichier ouvert" << std::endl;
+  }
+  else{
+      std::cout << "Echec ouverture fichier" << std::endl;
+  }
   std::string line;
-  //   std::getline(stream, line);
+  std::getline(stream, line);
+  std::cout << cont.size() << std::endl;
   while (std::getline(stream, line)) {
-    ss << line << '\n';
-    cont[i].x() = this->m_colors[std::atoi(line.c_str()) % m_colors.size()].x();
-    cont[i].y() = this->m_colors[std::atoi(line.c_str()) % m_colors.size()].y();
-    cont[i].z() = this->m_colors[std::atoi(line.c_str()) % m_colors.size()].z();
-    i++;
-    printf("%s\n", line.c_str());
+    for(int j = 0; j < 3; j++) {
+        cont[i+j] = this->m_colors[std::atoi(line.c_str()) % m_colors.size()];
+    }
+    i+=3;
+    printf("%d - %s\n",i , line.c_str());
   }
 
   attrib.unlock();
