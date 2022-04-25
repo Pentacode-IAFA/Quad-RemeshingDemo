@@ -46,6 +46,5 @@ void computePattern(
 }
 }
 
-#include "qr_patterns.cpp"
 
 #endif // QR_PATTERNS_H

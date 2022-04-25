@@ -926,7 +926,9 @@ void quadrangulate(
         std::vector<size_t> patchCorners;
         PolyMeshType patchMesh;
         std::vector<std::vector<size_t>> patchSides;
+        std::cout << "COMPUTING PATTERN" << std::endl;
         QuadRetopology::internal::computePattern(l, patchV, patchF, patchMesh, patchBorders, patchCorners, patchSides);
+        std::cout << "END COMPUTING PATTERN" << std::endl;
 
 #ifdef QUADRETOPOLOGY_DEBUG_SAVE_MESHES
         igl::writeOBJ(std::string("results/") + std::to_string(cId) + std::string("_patch.obj"), patchV, patchF);
