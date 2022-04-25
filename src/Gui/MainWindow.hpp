@@ -12,6 +12,15 @@
 #include <QMainWindow>
 #include <QDockWidget>
 
+// include the KeyMappingManager
+#include <Gui/Utils/KeyMappingManager.hpp>
+#include <Gui/Utils/Keyboard.hpp>
+
+// include Qt components
+#include <QKeyEvent>
+
+#include <Gui/Viewer/Viewer.hpp>
+
 namespace Ra {
     namespace Gui {
 
@@ -40,6 +49,7 @@ namespace Ra {
                               std::shared_ptr<Ra::Engine::Rendering::Renderer> e ) override;
 
             void print_name();
+            void display_Patch( QKeyEvent* );
 
         public slots:
 
@@ -61,7 +71,18 @@ namespace Ra {
 
         private:
             void createConnections();
-
+            Ra::Gui::KeyMappingManager::KeyMappingAction DISPLAY_PATCH;
+            std::shared_ptr<Ra::Engine::Rendering::RenderObject> m_obj;
+            std::array<Ra::Core::Utils::Color, 10> m_colors { Ra::Core::Utils::Color::Green(),
+                                                              Ra::Core::Utils::Color::Blue(),
+                                                              Ra::Core::Utils::Color::Yellow(),
+                                                              Ra::Core::Utils::Color::Magenta(),
+                                                              Ra::Core::Utils::Color::Cyan(),
+                                                              Ra::Core::Utils::Color::White(),
+                                                              Ra::Core::Utils::Color::Grey(),
+                                                              Ra::Core::Utils::Color::Black(),
+                                                              Ra::Core::Utils::Color::Skin(),
+                                                              Ra::Core::Utils::Color::Red() };
             std::unique_ptr<Ra::Gui::Viewer> m_viewer;
 
             std::unique_ptr<Ra::Gui::SelectionManager> m_selectionManager;

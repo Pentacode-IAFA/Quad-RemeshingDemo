@@ -20,12 +20,24 @@
 #include <Engine/RadiumEngine.hpp>
 #include <Engine/Rendering/RenderObjectManager.hpp>
 #include <Engine/Rendering/RenderObject.hpp>
-#include <Engine/Data/Mesh.hpp>
 #include <Core/Asset/GeometryData.hpp>
+
+#include <Core/Geometry/MeshPrimitives.hpp>
+#include <Engine/Scene/GeometryComponent.hpp>
+#include <Engine/Scene/GeometrySystem.hpp>
+
+// include the render object interface to access object properties
+#include <Core/Tasks/Task.hpp>
+
+
+using namespace Ra;
+using namespace Ra::Core;
+using namespace Ra::Engine;
 namespace Ra{
     using namespace Gui;
     using namespace Engine;
     using namespace Engine::Rendering;
+
 
     MainWindow::MainWindow(uint w, uint h, QWidget *parent) : MainWindowInterface(parent) {
 
@@ -56,6 +68,13 @@ namespace Ra{
         addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
         m_dockWidget = dockWidget;
 
+        // Configure Key Event
+        DISPLAY_PATCH = getViewer()->addKeyPressEventAction(
+                "DISPLAY_PATCH", "Key_U", "", "", "false", [this]( QKeyEvent* event ) {
+                    std::cout<<"U"<<"\n";
+                    this->display_Patch(event);
+                } );
+
         createConnections();
     }
 
@@ -76,7 +95,6 @@ namespace Ra{
     void MainWindow::updateUi(Ra::Plugins::RadiumPluginInterface *plugin) {
         QString name;
         if(plugin->doAddWidget(name)) {
-            printf("plop\n");
             m_dockWidget->setWidget(plugin->getWidget());
         }
     }
@@ -137,35 +155,58 @@ namespace Ra{
         }
     }
 
+    void MainWindow:: display_Patch(QKeyEvent*){
+        auto engine  = Ra::Engine::RadiumEngine::getInstance();
+        auto entitie = engine->getEntityManager()->getEntities()[1];
+        auto c = entitie->getComponents()[0].get();
+
+        auto ro = Ra::Engine::RadiumEngine::getInstance()->getRenderObjectManager()->getRenderObject(
+                c->m_renderObjects[0] );
+
+        auto& mesh = dynamic_cast<Ra::Core::Geometry::TriangleMesh&>(
+                ro->getMesh()->getAbstractGeometry() );
+
+        mesh.addAttrib( "in_color", Ra::Core::Vector4Array { mesh.vertices().size(), Ra::Core::Utils::Color::Green() } );
+
+       /* auto geometrySystem = engine->getSystem( "GeometrySystem" );
+        geometrySystem->addComponent( entitie, c );*/
+
+        //mesh.colorize( m_colors[0] );
+        std::cout<<"test : "<<mesh.getIndices().size()<<"\n";
+    }
+
     void MainWindow::print_name(){
         auto engine  = Ra::Engine::RadiumEngine::getInstance();
         auto manager = engine->getRenderObjectManager();
         auto entities = engine->getEntityManager()->getEntities();
 
         for (int i = 1; i < entities.size(); i++){
-            auto e = entities[i];
 
-            std::cout<<e->getName()<<"\n";
+            auto e = entities[i];
             auto ros = e->getComponents()[0]->getRenderObjects();
             std::cout<<ros.size()<<"\n";
+
 
             for (int y = 0; y < ros.size(); y++){
                 auto& miniros = ros[y];
                 auto renderO = manager->getRenderObject(miniros);
-                auto mesh = dynamic_cast<Ra::Core::Geometry::TriangleMesh&>(renderO->getMesh()->getAbstractGeometry());
-                std::cout<<"tset"<<mesh.getIndices().size()<<"\n";
-                
-                mesh.getAttrib("in_color")
 
+
+                auto& mesh = dynamic_cast<Ra::Core::Geometry::TriangleMesh&>(renderO->getMesh()->getAbstractGeometry());
+                std::cout<<"test : "<<mesh.getIndices().size()<<"\n";
+                mesh.colorize( Ra::Core::Utils::Color::Green());
             }
-       };
+
+            Transform transform(Translation { 10, 1, 0 } );
+            e->setTransform(transform);
+       }
     }
 
     void MainWindow::createConnections() {
         connect(loadFileAct, &QAction::triggered, this, &MainWindow::loadFile);
         // Loading setup.
         connect( this, &MainWindow::fileLoading, mainApp, &Ra::Gui::BaseApplication::loadFile );
-        connect( this, &MainWindow::fileLoading, this, &MainWindow::print_name);
+       // connect( this, &MainWindow::fileLoading, this, &MainWindow::print_name);
     }
 
     void MainWindow::displayHelpDialog() {
