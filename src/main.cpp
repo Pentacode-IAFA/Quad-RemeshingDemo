@@ -36,7 +36,8 @@ int main( int argc, char** argv ) {
     app.initialize( MainWindowFactory() );
     app.setContinuousUpdate( true );
 
-
+    auto cube = Ra::Core::Geometry::makeSharpBox( { 0.1f, 0.1f, 0.1f } );
+    std::cout <<  typeid( std::move( cube )).name() << endl;
 
     app.m_mainWindow->prepareDisplay();
     return app.exec();

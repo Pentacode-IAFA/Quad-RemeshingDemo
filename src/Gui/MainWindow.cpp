@@ -158,21 +158,24 @@ namespace Ra{
     void MainWindow:: display_Patch(QKeyEvent*){
         auto engine  = Ra::Engine::RadiumEngine::getInstance();
         auto entitie = engine->getEntityManager()->getEntities()[1];
-        auto c = entitie->getComponents()[0].get();
 
-        auto ro = Ra::Engine::RadiumEngine::getInstance()->getRenderObjectManager()->getRenderObject(
-                c->m_renderObjects[0] );
+        auto c = entitie->getComponents()[0].get();
+        auto ro = Ra::Engine::RadiumEngine::getInstance()->getRenderObjectManager()->getRenderObject(c->m_renderObjects[0] );
 
         auto& mesh = dynamic_cast<Ra::Core::Geometry::TriangleMesh&>(
                 ro->getMesh()->getAbstractGeometry() );
 
-        mesh.addAttrib( "in_color", Ra::Core::Vector4Array { mesh.vertices().size(), Ra::Core::Utils::Color::Green() } );
+        auto new_mesh = Ra::Core::Geometry::TriangleMesh(mesh);
 
-       /* auto geometrySystem = engine->getSystem( "GeometrySystem" );
-        geometrySystem->addComponent( entitie, c );*/
+        new_mesh.addAttrib( "in_color", Ra::Core::Vector4Array { new_mesh.vertices().size(), Ra::Core::Utils::Color::Green()});
+        auto e = engine->getEntityManager()->createEntity( "Patch" );
+        auto c_final =  new Ra::Engine::Scene::TriangleMeshComponent( "Patch Mesh", e, std::move( new_mesh ), nullptr );
+        auto geometrySystem = engine->getSystem( "GeometrySystem" );
+        geometrySystem->addComponent( e,c_final );
 
-        //mesh.colorize( m_colors[0] );
-        std::cout<<"test : "<<mesh.getIndices().size()<<"\n";
+
+        engine->getEntityManager()->removeEntity(entitie);
+        this->prepareDisplay();
     }
 
     void MainWindow::print_name(){
