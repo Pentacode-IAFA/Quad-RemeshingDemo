@@ -69,6 +69,8 @@ namespace Ra {
         private slots:
             void loadFile();
 
+            void clearMesh();
+
         private:
             void createConnections();
             Ra::Gui::KeyMappingManager::KeyMappingAction DISPLAY_PATCH;
@@ -90,6 +92,8 @@ namespace Ra {
             std::unique_ptr<Ra::Gui::ItemModel> m_sceneModel;
 
             QAction* loadFileAct;
+
+            QAction* clearMeshAct;
 
             QDockWidget *m_dockWidget;
         };

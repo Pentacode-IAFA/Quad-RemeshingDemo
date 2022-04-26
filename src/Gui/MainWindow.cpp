@@ -63,7 +63,10 @@ MainWindow::MainWindow(uint w, uint h, QWidget *parent)
   setWindowTitle(QString("Radium player"));
   auto fileMenu = menuBar()->addMenu(tr("&File"));
   loadFileAct = new QAction("open");
+  clearMeshAct = new QAction("clear mesh");
   fileMenu->addAction(loadFileAct);
+  fileMenu->addAction(clearMeshAct);
+
 
   // Plugin widget
   QDockWidget *dockWidget = new QDockWidget("Dock", this);
@@ -148,6 +151,11 @@ void MainWindow::loadFile() {
   }
 }
 
+void MainWindow::clearMesh() {
+    auto engine = Ra::Engine::RadiumEngine::getInstance();
+    engine->getEntityManager()->deleteEntities();
+}
+
 void MainWindow::display_Patch(QKeyEvent *) {
   auto engine = Ra::Engine::RadiumEngine::getInstance();
   auto entitie = engine->getEntityManager()->getEntities()[1];
@@ -170,7 +178,7 @@ void MainWindow::display_Patch(QKeyEvent *) {
 
   auto &cont = attrib.getDataWithLock();
 
-  std::cout << new_mesh.vertices().size() << std::endl;
+  //std::cout << new_mesh.vertices().size() << std::endl;
 
   int i = 0;
   std::ifstream stream("../../src/Assets/bucket_p0.patch");
@@ -182,13 +190,13 @@ void MainWindow::display_Patch(QKeyEvent *) {
   }
   std::string line;
   std::getline(stream, line);
-  std::cout << cont.size() << std::endl;
+  //std::cout << cont.size() << std::endl;
   while (std::getline(stream, line)) {
     for(int j = 0; j < 3; j++) {
         cont[i+j] = this->m_colors[std::atoi(line.c_str()) % m_colors.size()];
     }
     i+=3;
-    printf("%d - %s\n",i , line.c_str());
+    //printf("%d - %s\n",i , line.c_str());
   }
 
   attrib.unlock();
@@ -235,7 +243,10 @@ void MainWindow::createConnections() {
   connect(this, &MainWindow::fileLoading, mainApp,
           &Ra::Gui::BaseApplication::loadFile);
   // connect( this, &MainWindow::fileLoading, this, &MainWindow::print_name);
+
+  connect(clearMeshAct, &QAction::triggered, this, &MainWindow::clearMesh);
 }
 
 void MainWindow::displayHelpDialog() { m_viewer->displayHelpDialog(); }
+
 } // namespace Ra
