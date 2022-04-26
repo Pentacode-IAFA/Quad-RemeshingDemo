@@ -181,7 +181,7 @@ void MainWindow::display_Patch(QKeyEvent *) {
   //std::cout << new_mesh.vertices().size() << std::endl;
 
   int i = 0;
-  std::ifstream stream("../../src/Assets/bucket_p0.patch");
+  std::ifstream stream("../../src/Assets/twirl20k_p0.patch");
   if(stream.is_open()){
       std::cout << "Fichier ouvert" << std::endl;
   }
@@ -248,5 +248,9 @@ void MainWindow::createConnections() {
 }
 
 void MainWindow::displayHelpDialog() { m_viewer->displayHelpDialog(); }
+<<<<<<< HEAD
 
 } // namespace Ra
+=======
+} // namespace Ra
+>>>>>>> ebe294eb7a2b05866cf8471267d4d3b47e4b859c
