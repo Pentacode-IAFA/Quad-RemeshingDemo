@@ -160,7 +160,7 @@ inline void trace(const std::string& filename, TraceMesh& traceTrimesh)
     SaveAllData(PTr,baseFilename,0,false,false);
 }
 
-inline void quadrangulate(
+inline void myquadrangulate(
         const std::string& filename,
         TriangleMesh& trimeshToQuadrangulate,
         PolyMesh& quadmesh,
@@ -439,7 +439,7 @@ int main( int argc, char** argv ) {
     trace(meshFilename, traceTrimesh);
 
     std::cout<<std::endl<<"--------------------- 3 - Quadrangulation ---------------------"<<std::endl;
-    quadrangulate(meshFilename, trimeshToQuadrangulate, quadmesh, trimeshPartitions, trimeshCorners, trimeshFeatures, trimeshFeaturesC, quadmeshPartitions, quadmeshCorners, ilpResult, parameters);
+    myquadrangulate(meshFilename, trimeshToQuadrangulate, quadmesh, trimeshPartitions, trimeshCorners, trimeshFeatures, trimeshFeaturesC, quadmeshPartitions, quadmeshCorners, ilpResult, parameters);
     
     return app.exec();
 }

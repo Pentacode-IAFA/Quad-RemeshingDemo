@@ -26,7 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef QUADFROMPATCHES_H
 #define QUADFROMPATCHES_H
 
-#include <quadretopology/quadretopology.h>
+#include "../../libs/quadretopology/quadretopology/quadretopology.h" 
 
 namespace qfp {
 

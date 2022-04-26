@@ -85,13 +85,13 @@ include_directories(../libs/quadwild/components/field_computation)
 include_directories(../libs/quadwild/libs/vcglib)
 include_directories(../libs/quadwild/libs/libigl/include)
 include_directories(../libs/quadwild/libs/xfield_tracer)
-include_directories(../libs/quadwild/libs/quadretopology)
+include_directories(../libs/quadwild/libs/quadretopology/quadretopology)
+include_directories(../libs/quadwild/libs/quadretopology/quadretopology/includes)
+include_directories(../libs/quadwild/libs/quadretopology/patterns)
 
 add_library( quadwildlib SHARED IMPORTED GLOBAL)
 set_target_properties( quadwildlib PROPERTIES 
         IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/libs/quadwild/quadwild/libquadwild.so")
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC quadwildlib )
 

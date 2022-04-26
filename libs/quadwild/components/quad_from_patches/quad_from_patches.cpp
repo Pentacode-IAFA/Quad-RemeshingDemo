@@ -24,7 +24,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ****************************************************************************/
 
 #include "quad_from_patches.h"
-#include <quadretopology/quadretopology.h>
 #include <random>
 
 #ifdef SAVE_MESHES_FOR_DEBUG
