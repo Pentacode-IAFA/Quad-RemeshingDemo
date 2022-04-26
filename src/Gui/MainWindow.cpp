@@ -173,7 +173,7 @@ void MainWindow::display_Patch(QKeyEvent *) {
   std::cout << new_mesh.vertices().size() << std::endl;
 
   int i = 0;
-  std::ifstream stream("../../src/Assets/bucket_p0.patch");
+  std::ifstream stream("../../src/Assets/twirl20k_p0.patch");
   if(stream.is_open()){
       std::cout << "Fichier ouvert" << std::endl;
   }
