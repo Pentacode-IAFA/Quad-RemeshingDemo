@@ -74,13 +74,34 @@ MainWindow::MainWindow(uint w, uint h, QWidget *parent)
   addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
   m_dockWidget = dockWidget;
 
-  // Configure Key Event
-  DISPLAY_PATCH = getViewer()->addKeyPressEventAction(
-      "DISPLAY_PATCH", "Key_U", "", "", "false", [this](QKeyEvent *event) {
-        std::cout << "U"
-                  << "\n";
-        this->display_Patch(event);
-      });
+    DISPLAY_BASE= getViewer()->addKeyPressEventAction(
+            "DISPLAY_BASE", "Key_A", "", "", "false", [this]( QKeyEvent* event ) {
+                std::cout << "A" << std::endl;
+                display_file(event,"twirl20k.obj");
+            } );
+
+    DISPLAY_REM = getViewer()->addKeyPressEventAction(
+            "DISPLAY_REM", "Key_Z", "", "", "false", [this]( QKeyEvent* event ) {
+                std::cout << "Z" << std::endl;
+                display_file(event,"twirl20k_rem.obj");
+            } );
+    DISPLAY_PATCH = getViewer()->addKeyPressEventAction(
+            "DISPLAY_PATCH", "Key_E", "", "", "false", [this](QKeyEvent *event) {
+                std::cout << "E" << std::endl;
+                this->display_patch(event);
+            });
+    DISPLAY_QUADS = getViewer()->addKeyPressEventAction(
+            "DISPLAY_QUADS", "Key_R", "", "", "false", [this]( QKeyEvent* event ) {
+                std::cout << "R" << std::endl;
+
+                display_file(event,"twirl20k_quadrangulation.obj");
+            } );
+    DISPLAY_QUADS_SMOOTH = getViewer()->addKeyPressEventAction(
+            "DISPLAY_QUADS_SMMOTH", "Key_T", "", "", "false", [this]( QKeyEvent* event ) {
+                std::cout << "T" << std::endl;
+
+                display_file(event,"twirl20k_quadrangulation_smooth.obj");
+            } );
 
   createConnections();
 }
@@ -156,8 +177,13 @@ void MainWindow::clearMesh() {
     engine->getEntityManager()->deleteEntities();
 }
 
-void MainWindow::display_Patch(QKeyEvent *) {
+
+// -- Fonctions affichages remaillages
+
+void MainWindow::display_patch(QKeyEvent *) {
   auto engine = Ra::Engine::RadiumEngine::getInstance();
+  this->clearMesh();
+  engine->loadFile("../../src/Assets/twirl20k_p0.obj");
   auto entitie = engine->getEntityManager()->getEntities()[1];
 
   auto c = entitie->getComponents()[0].get();
@@ -178,8 +204,6 @@ void MainWindow::display_Patch(QKeyEvent *) {
 
   auto &cont = attrib.getDataWithLock();
 
-  //std::cout << new_mesh.vertices().size() << std::endl;
-
   int i = 0;
   std::ifstream stream("../../src/Assets/twirl20k_p0.patch");
   if(stream.is_open()){
@@ -190,17 +214,14 @@ void MainWindow::display_Patch(QKeyEvent *) {
   }
   std::string line;
   std::getline(stream, line);
-  //std::cout << cont.size() << std::endl;
   while (std::getline(stream, line)) {
     for(int j = 0; j < 3; j++) {
         cont[i+j] = this->m_colors[std::atoi(line.c_str()) % m_colors.size()];
     }
     i+=3;
-    //printf("%d - %s\n",i , line.c_str());
   }
 
   attrib.unlock();
-
   auto e = engine->getEntityManager()->createEntity("Patch");
   auto c_final = new Ra::Engine::Scene::TriangleMeshComponent(
       "Patch Mesh", e, std::move(new_mesh), nullptr);
@@ -211,30 +232,13 @@ void MainWindow::display_Patch(QKeyEvent *) {
   this->prepareDisplay();
 }
 
-void MainWindow::print_name() {
-  auto engine = Ra::Engine::RadiumEngine::getInstance();
-  auto manager = engine->getRenderObjectManager();
-  auto entities = engine->getEntityManager()->getEntities();
+void MainWindow::display_file(QKeyEvent *, std::string file){
+    auto engine = Ra::Engine::RadiumEngine::getInstance();
 
-  for (int i = 1; i < entities.size(); i++) {
+    this->clearMesh();
+    engine->loadFile("../../src/Assets/"+file);
 
-    auto e = entities[i];
-    auto ros = e->getComponents()[0]->getRenderObjects();
-    std::cout << ros.size() << "\n";
-
-    for (int y = 0; y < ros.size(); y++) {
-      auto &miniros = ros[y];
-      auto renderO = manager->getRenderObject(miniros);
-
-      auto &mesh = dynamic_cast<Ra::Core::Geometry::TriangleMesh &>(
-          renderO->getMesh()->getAbstractGeometry());
-      std::cout << "test : " << mesh.getIndices().size() << "\n";
-      mesh.colorize(Ra::Core::Utils::Color::Green());
-    }
-
-    Transform transform(Translation{10, 1, 0});
-    e->setTransform(transform);
-  }
+    this->prepareDisplay();
 }
 
 void MainWindow::createConnections() {
@@ -248,9 +252,5 @@ void MainWindow::createConnections() {
 }
 
 void MainWindow::displayHelpDialog() { m_viewer->displayHelpDialog(); }
-<<<<<<< HEAD
 
 } // namespace Ra
-=======
-} // namespace Ra
->>>>>>> ebe294eb7a2b05866cf8471267d4d3b47e4b859c

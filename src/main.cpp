@@ -1,21 +1,13 @@
 #include <MainApplication.hpp>
 #include <Gui/MainWindow.hpp>
-#include <QKeyEvent>
 
 #include <Gui/Viewer/Viewer.hpp>
 #include <Engine/Scene/EntityManager.hpp>
 #include <Engine/Scene/Entity.hpp>
 
 // include the KeyMappingManager
-#include <Gui/Utils/KeyMappingManager.hpp>
-#include <Gui/Utils/Keyboard.hpp>
 
 // include Qt components
-#include <QKeyEvent>
-#include <Gui/Viewer/Viewer.hpp>
-
-#include <Core/Geometry/MeshPrimitives.hpp>
-#include <Engine/Scene/EntityManager.hpp>
 #include <Engine/Scene/GeometryComponent.hpp>
 #include <Engine/Scene/GeometrySystem.hpp>
 
@@ -36,9 +28,10 @@ int main( int argc, char** argv ) {
     app.initialize( MainWindowFactory() );
     app.setContinuousUpdate( true );
 
-    auto cube = Ra::Core::Geometry::makeSharpBox( { 0.1f, 0.1f, 0.1f } );
-    std::cout <<  typeid( std::move( cube )).name() << endl;
+    auto engine = Ra::Engine::RadiumEngine::getInstance();
 
+    // chargement de la mesh de base
+    engine->loadFile("../../src/Assets/twirl20k.obj");
     app.m_mainWindow->prepareDisplay();
     return app.exec();
 }

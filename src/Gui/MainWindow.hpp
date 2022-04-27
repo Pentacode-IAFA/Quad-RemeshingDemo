@@ -48,8 +48,8 @@ namespace Ra {
             void addRenderer( const std::string& name,
                               std::shared_ptr<Ra::Engine::Rendering::Renderer> e ) override;
 
-            void print_name();
-            void display_Patch( QKeyEvent* );
+            void display_patch( QKeyEvent* );
+            void display_file(QKeyEvent*, std::string);
 
         public slots:
 
@@ -73,7 +73,12 @@ namespace Ra {
 
         private:
             void createConnections();
+            Ra::Gui::KeyMappingManager::KeyMappingAction DISPLAY_BASE;
+            Ra::Gui::KeyMappingManager::KeyMappingAction DISPLAY_REM;
             Ra::Gui::KeyMappingManager::KeyMappingAction DISPLAY_PATCH;
+            Ra::Gui::KeyMappingManager::KeyMappingAction DISPLAY_QUADS;
+            Ra::Gui::KeyMappingManager::KeyMappingAction DISPLAY_QUADS_SMOOTH;
+
             std::shared_ptr<Ra::Engine::Rendering::RenderObject> m_obj;
             std::array<Ra::Core::Utils::Color, 10> m_colors { Ra::Core::Utils::Color::Green(),
                                                               Ra::Core::Utils::Color::Blue(),
